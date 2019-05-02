@@ -17,6 +17,7 @@ Plug 'nvie/vim-flake8'
 Plug 'posva/vim-vue'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'simnalamburt/vim-mundo'
+Plug 'elixir-editors/vim-elixir'
 Plug 'travitch/hasksyn'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-scripts/tcomment'
@@ -37,6 +38,9 @@ set number
 set wrap
 set linebreak
 set clipboard=unnamedplus
+
+syntax on
+colorscheme PaperColor
 
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
@@ -67,3 +71,5 @@ map <leader>t :FZF <CR>
 " --color: Search color options
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --no-messages --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
 map <leader>f :Find 
+
+autocmd Filetype haskell setlocal ts=2 sts=2 sw=2 expandtab
