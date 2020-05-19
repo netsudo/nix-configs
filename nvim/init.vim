@@ -13,7 +13,7 @@ Plug 'garbas/vim-snipmate' | Plug 'marcweber/vim-addon-mw-utils' | Plug 'tomtom/
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'lvht/fzf-mru'
 Plug 'majutsushi/tagbar'
-Plug 'nvie/vim-flake8'
+Plug 'tell-k/vim-autopep8'
 Plug 'posva/vim-vue'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'simnalamburt/vim-mundo'
@@ -22,25 +22,30 @@ Plug 'travitch/hasksyn'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-scripts/tcomment'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-surround'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'lifepillar/vim-solarized8'
+Plug 'vim-syntastic/syntastic'
 call plug#end()
 
-autocmd vimenter * NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-autocmd VimEnter * NERDTree | wincmd p
-autocmd FileType html setlocal shiftwidth=2 tabstop=2
 :let g:NERDTreeWinSize=20
 
 set tabstop=4
 set shiftwidth=4
-set noexpandtab
+set softtabstop=4
+set expandtab
 set number
 set wrap
 set linebreak
 set clipboard=unnamedplus
 
+" Theme settings
 syntax on
-colorscheme PaperColor
+set background=dark
+colorscheme solarized8
+highlight Normal ctermbg=NONE
+highlight nonText ctermbg=NONE
 
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
@@ -55,8 +60,13 @@ let g:vim_jsx_pretty_colorful_config = 1
 let mapleader = " "
 let g:mapleader = " "
 
+" Nerdtree
+let g:NERDTreeWinSize=25
+map <leader>j :NERDTreeToggle <CR>
+
 " FZF:
 map <leader>t :FZF <CR>
+map <leader>g :Ag <CR>
 " FZF.vim:
 " --column: Show column number
 " --line-number: Show line number
@@ -73,3 +83,21 @@ command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-h
 map <leader>f :Find 
 
 autocmd Filetype haskell setlocal ts=2 sts=2 sw=2 expandtab
+
+" Autopep8 settings
+let g:autopep8_on_save = 1
+let g:autopep8_aggressive=2
+let g:autopep8_disable_show_diff=1
+autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
+
+" Syntastic settings
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_javascript_eslint_exe = 'lint --'
