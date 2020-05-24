@@ -22,6 +22,7 @@ Plug 'travitch/hasksyn'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 Plug 'vim-scripts/tcomment'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim',
 Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-surround'
 Plug 'terryma/vim-multiple-cursors'
@@ -29,8 +30,7 @@ Plug 'lifepillar/vim-solarized8'
 Plug 'vim-syntastic/syntastic'
 call plug#end()
 
-:let g:NERDTreeWinSize=20
-
+" Space settings
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
@@ -40,6 +40,16 @@ set wrap
 set linebreak
 set clipboard=unnamedplus
 
+" Assign a leader:
+let mapleader = " "
+let g:mapleader = " "
+
+" Remaps
+map <leader>h :wincmd h<CR>
+map <leader>j :wincmd j<CR>
+map <leader>k :wincmd k<CR>
+map <leader>l :wincmd l<CR>
+
 " Theme settings
 syntax on
 set background=dark
@@ -47,26 +57,29 @@ colorscheme solarized8
 highlight Normal ctermbg=NONE
 highlight nonText ctermbg=NONE
 
+" Rainbow Parentheses
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 
+" Powerline
 let g:airline_powerline_fonts = 1
 let g:jsx_highlight = 0
 let g:vim_jsx_pretty_colorful_config = 1
 
-" Assign a leader:
-let mapleader = " "
-let g:mapleader = " "
+" YCM Settings
+nnoremap <leader>d :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>r :YcmCompleter GoToReferences<CR>
 
 " Nerdtree
 let g:NERDTreeWinSize=25
-map <leader>j :NERDTreeToggle <CR>
+map <leader>o :NERDTreeToggle <CR>
 
 " FZF:
 map <leader>t :FZF <CR>
 map <leader>g :Ag <CR>
+let g:ackprg = 'ag --nogroup --nocolor --column'
 " FZF.vim:
 " --column: Show column number
 " --line-number: Show line number
@@ -82,6 +95,7 @@ map <leader>g :Ag <CR>
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --no-messages --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
 map <leader>f :Find 
 
+" Haskell Indentation
 autocmd Filetype haskell setlocal ts=2 sts=2 sw=2 expandtab
 
 " Autopep8 settings
@@ -94,7 +108,6 @@ autocmd FileType python noremap <buffer> <F8> :call Autopep8()<CR>
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
