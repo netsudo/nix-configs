@@ -3,13 +3,11 @@
 "##########"
 
 call plug#begin('~/.nvim/plugged')
-Plug 'Valloric/YouCompleteMe'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'cuzzo/react-complete-me'
 Plug 'pangloss/vim-javascript'
 Plug 'MaxMEllon/vim-jsx-pretty'
 Plug 'alvan/vim-closetag'
-Plug 'ervandew/supertab'
-Plug 'garbas/vim-snipmate' | Plug 'marcweber/vim-addon-mw-utils' | Plug 'tomtom/tlib_vim'
 Plug 'kien/rainbow_parentheses.vim'
 Plug 'lvht/fzf-mru'
 Plug 'majutsushi/tagbar'
@@ -49,6 +47,7 @@ map <leader>h :wincmd h<CR>
 map <leader>j :wincmd j<CR>
 map <leader>k :wincmd k<CR>
 map <leader>l :wincmd l<CR>
+nmap <silent> <leader>z :noh<CR>
 
 " Theme settings
 syntax on
@@ -68,9 +67,44 @@ let g:airline_powerline_fonts = 1
 let g:jsx_highlight = 0
 let g:vim_jsx_pretty_colorful_config = 1
 
-" YCM Settings
-nnoremap <leader>d :YcmCompleter GoToDefinition<CR>
-nnoremap <leader>r :YcmCompleter GoToReferences<CR>
+" COC Settings
+" TextEdit might fail if hidden is not set.
+set hidden
+
+" Some servers have issues with backup files, see #649.
+set nobackup
+set nowritebackup
+set cmdheight=2
+set updatetime=300
+
+if has("patch-8.1.1564")
+"Recently vim can merge signcolumn and number column into one
+    set signcolumn=number
+else
+    set signcolumn=yes
+endif
+
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" GoTo code navigation.
+nmap <silent> <leader>d <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> <leader>r <Plug>(coc-references)
 
 " Nerdtree
 let g:NERDTreeWinSize=25
